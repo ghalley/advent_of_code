@@ -4,20 +4,34 @@ def light_up(directions)
   lights = Array.new(1000, Array.new(1000, false))
 
   directions.each do |direction|
-    h_length = direction.end[0] - direction.start[0]
-    v_length = direction.end[1] - direction.start[1]
+    h_length = direction[:end][0] - direction[:start][0] + 1
+    v_length = direction[:end][1] - direction[:start][1] + 1
     h_length.times do |h|
       v_length.times do |v|
-        lights[h+ direction.start[0]]
+        current_light = lights[h+ direction[:start][0]][v + direction[:start][1]]
+        lights[h+ direction[:start][0]][v + direction[:start][1]] = set_light(direction[:action], current_light)
       end
     end
   end
+
+  lights.each do |row|
+    total_lit += row.count {|r| r}
+  end
+  puts total_lit
 end
 
-def method_name
-  
+def set_light(action, current_value)
+  case action
+  when 'on'
+    true
+  when 'off'
+    false
+  when 'toggle'
+    current_value ? false : true
+  end
 end
 
+# directions = [{action: 'on', start: [0,0], end: [999,999]}]
 directions = [{action: 'on', start: [489,959], end: [759,964]},
 {action: 'off', start: [820,516], end: [871,914]},
 {action: 'off', start: [427,423], end: [929,502]},
@@ -319,3 +333,5 @@ directions = [{action: 'on', start: [489,959], end: [759,964]},
 {action: 'on', start: [31,760], end: [655,892]},
 {action: 'toggle', start: [628,958], end: [811,992]}
 ]
+
+light_up(directions)
