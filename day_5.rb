@@ -28,6 +28,36 @@ def bad_strings?(string)
   true
 end
 
+# Part 2
+
+def nicer_strings(strings)
+  nice_ones = 0
+
+  strings.each do |string|
+    nice_ones += 1 if double_doubles(string) && sandwich(string)
+  end
+  nice_ones
+end
+
+def double_doubles(string)
+  string.split('').each_with_index do |char, index|
+    sub = string[index..(index+1)]
+    match = string.index(sub)
+
+    if match
+      return true if string.index(sub, match+2)
+    end
+  end
+  false
+end
+
+def sandwich(string)
+  string.split('').each_with_index do |char,index|
+    return true if string[index+2] == char
+  end
+  return false
+end
+
 strings = ['zgsnvdmlfuplrubt',
 'vlhagaovgqjmgvwq',
 'ffumlmqwfcsyqpss',
@@ -1030,3 +1060,4 @@ strings = ['zgsnvdmlfuplrubt',
 'cqfikbgxvjmnfncy']
 
 puts nice_strings(strings)
+puts nicer_strings(strings)
