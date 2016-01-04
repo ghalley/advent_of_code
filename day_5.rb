@@ -41,7 +41,8 @@ end
 
 def double_doubles(string)
   string.split('').each_with_index do |char, index|
-    sub = string[index..(index+1)]
+    next if index == 0
+    sub = string[(index-1)..index]
     match = string.index(sub)
 
     if match
