@@ -52,7 +52,7 @@ def set_brightness(action, current_value)
   when 'on'
     current_value + 1
   when 'off'
-    current_value - 1
+    current_value > 0 ? current_value - 1 : 0
   when 'toggle'
     current_value + 2
   end
@@ -363,5 +363,5 @@ directions = [{action: 'on', start: [489,959], end: [759,964]},
 {action: 'toggle', start: [628,958], end: [811,992]}
 ]
 
-# puts light_up(directions)
+puts light_up(directions)
 puts brighten_up(directions)
