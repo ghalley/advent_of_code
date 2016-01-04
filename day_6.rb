@@ -1,6 +1,4 @@
 def light_up(directions)
-  total_lit = 0
-
   lights = Hash.new(false)
 
   directions.each do |direction|
@@ -30,7 +28,37 @@ def set_light(action, current_value)
   end
 end
 
-# directions = [{action: 'on', start: [0,0], end: [999,999]}]
+def brighten_up(directions)
+  lights = Hash.new(0)
+
+  directions.each do |direction|
+    h_length = direction[:end][0] - direction[:start][0] + 1
+    v_length = direction[:end][1] - direction[:start][1] + 1
+
+    h_length.times do |h|
+      v_length.times do |v|
+        current_light = lights[[(h+ direction[:start][0]), (v + direction[:start][1])]]
+
+        lights[[(h+ direction[:start][0]), (v + direction[:start][1])]] = set_brightness(direction[:action], current_light)
+      end
+    end
+  end
+
+  lights.values.reduce(:+)
+end
+
+def set_brightness(action, current_value)
+  case action
+  when 'on'
+    current_value + 1
+  when 'off'
+    current_value - 1
+  when 'toggle'
+    current_value + 2
+  end
+end
+
+# directions = [{action: 'toggle', start: [0,0], end: [999,999]}]
 # directions = [{action: 'toggle', start: [0,0], end: [999,0]}]
 # directions = [{action: 'on', start: [4,4], end: [5,5]}]
 directions = [{action: 'on', start: [489,959], end: [759,964]},
@@ -335,4 +363,5 @@ directions = [{action: 'on', start: [489,959], end: [759,964]},
 {action: 'toggle', start: [628,958], end: [811,992]}
 ]
 
-puts light_up(directions)
+# puts light_up(directions)
+puts brighten_up(directions)
