@@ -1,5 +1,22 @@
 # hash for each wire value
 
+def pack_zeroes(string)
+  string.rjust(16, '0')
+end
+
+def manual_not(int)
+  string = pack_zeroes(int.to_s(2))
+  result = []
+
+  string.each_char do |char|
+    if char == '0'
+      result << '1'
+    else
+      result << '0'
+    end
+  end
+  result.join.to_i(2)
+end
 
 def parse_instruction(string)
   operation_list = ['AND', 'OR', 'LSHIFT', 'RSHIFT']
