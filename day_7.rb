@@ -43,7 +43,8 @@ def build_circuit(instructions)
     instructions_hash[line_array.last] = {operand_1: line_array.first, operand_2: line_array[2], operation: line_array[1]}
 
     # initial values
-    wires[line_array.last] = line_array[1].nil? && instructions_hash[line_array.first].nil? ? line_array.first : nil
+    wires[line_array.last] = line_array[1].nil? && line_array.first.to_i != 0 ? line_array.first : nil
+    puts "#{line_array.last} : #{wires[line_array.last]} #{line_array.first.to_i != 0}"
   end
 
   puts "Check Instructions"
@@ -53,7 +54,7 @@ def build_circuit(instructions)
     end
   end
 
-  puts "#{wires.sort}"
+  puts wires['z']
 
   # puts "#{instruction_array.select { |i| wires.keys.include?(i[:operand_1]) || wires.keys.include?(i[:operand_2]) }}"
 
@@ -91,6 +92,8 @@ def check_instruction(i, wires, instructions_hash)
       result=eval "#{operand_1} #{trans[instructions_hash[i][:operation]]} #{operand_2}"
     end
     wires[i] =  result
+  elsif wires[instructions_hash[i][:operand_1]]
+    wires[i] = wires[instructions_hash[i][:operand_1]]
   end
 end
 
@@ -104,7 +107,7 @@ NOT x -> h
 456 -> y
 NOT y -> i"
 
-build_circuit(samples)
+# build_circuit(samples)
 
 instructions = "af AND ah -> ai
 NOT lk -> ll
@@ -447,4 +450,4 @@ k AND m -> n
 as RSHIFT 2 -> at
 "
 
-# build_circuit(instructions)
+build_circuit(instructions)
