@@ -33,31 +33,25 @@ def parse_instruction(string)
   [operand_1, operation, operand_2, target_wire]
 end
 
-def build_circuit(instructions)
+def build_circuit(instructions, target)
   wires = {}
   instructions_hash = {}
 
-  puts "Build Instructions"
   instructions.each_line do |line|
     line_array = parse_instruction(line)
     instructions_hash[line_array.last] = {operand_1: line_array.first, operand_2: line_array[2], operation: line_array[1]}
 
     # initial values
-    wires[line_array.last] = line_array[1].nil? && line_array.first.to_i != 0 ? line_array.first : nil
-    puts "#{line_array.last} : #{wires[line_array.last]} #{line_array.first.to_i != 0}"
+    wires[line_array.last] = line_array[1].nil? && !(line_array.first.match(/[0-9]/).nil?) ? line_array.first : nil
   end
 
-  puts "Check Instructions"
-  while wires['z'].nil?
+  while wires[target].nil?
     instructions_hash.keys.each do |i|
       check_instruction(i, wires, instructions_hash)
     end
   end
 
-  puts wires['z']
-
-  # puts "#{instruction_array.select { |i| wires.keys.include?(i[:operand_1]) || wires.keys.include?(i[:operand_2]) }}"
-
+  puts wires[target]
 end
 
 def check_instruction(i, wires, instructions_hash)
@@ -79,16 +73,13 @@ def check_instruction(i, wires, instructions_hash)
     if wires.keys.include? operand_2
       operand_2 = wires[operand_2]
     end
-    # puts "1: #{operand_1} 2: #{operand_2} #{instructions_hash[i][:operation]}"
-
-    # return if (operand_1.nil? && operand_2.nil?) || operand_1.nil?
 
     if instructions_hash[i][:operation] == 'NOT'
       return if operand_1.nil?
       result = manual_not(operand_1.to_i)
     else
       return if operand_1.nil? || operand_2.nil?
-      puts "#{operand_1} #{trans[instructions_hash[i][:operation]]} #{operand_2}"
+      # puts "#{operand_1} #{trans[instructions_hash[i][:operation]]} #{operand_2}"
       result=eval "#{operand_1} #{trans[instructions_hash[i][:operation]]} #{operand_2}"
     end
     wires[i] =  result
@@ -107,7 +98,7 @@ NOT x -> h
 456 -> y
 NOT y -> i"
 
-# build_circuit(samples)
+build_circuit(samples, 'z')
 
 instructions = "af AND ah -> ai
 NOT lk -> ll
@@ -450,4 +441,4 @@ k AND m -> n
 as RSHIFT 2 -> at
 "
 
-build_circuit(instructions)
+build_circuit(instructions, 'a')
