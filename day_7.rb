@@ -1,11 +1,5 @@
-# hash for each wire value
-
-def pack_zeroes(string)
-  string.rjust(16, '0')
-end
-
 def manual_not(int)
-  string = pack_zeroes(int.to_s(2))
+  string = int.to_s(2).rjust(16, '0')
   result = []
 
   string.each_char do |char|
@@ -32,28 +26,85 @@ def parse_instruction(string)
     operand_1 = array.first
     operand_2 = array[2]
   else
-    # puts "#{array}"
     operation = nil
     operand_1 = array.first
   end
 
-  # puts "operand_1=#{operand_1}, operation=#{operation}, operand_2=#{operand_2}, target_wire=#{target_wire}"
   [operand_1, operation, operand_2, target_wire]
 end
 
 def build_circuit(instructions)
-  wires = Hash.new(0)
-  instruction_array = []
+  wires = {}
+  instructions_hash = {}
 
+  puts "Build Instructions"
   instructions.each_line do |line|
     line_array = parse_instruction(line)
-    instruction_array << {operand_1: line_array.first, operand_2: line_array[2], operation: line_array[1], target_wire: line_array.last}
+    instructions_hash[line_array.last] = {operand_1: line_array.first, operand_2: line_array[2], operation: line_array[1]}
+
+    # initial values
+    wires[line_array.last] = line_array[1].nil? && instructions_hash[line_array.first].nil? ? line_array.first : nil
   end
-  puts "#{instruction_array}"
+
+  puts "Check Instructions"
+  while wires['z'].nil?
+    instructions_hash.keys.each do |i|
+      check_instruction(i, wires, instructions_hash)
+    end
+  end
+
+  puts "#{wires.sort}"
+
+  # puts "#{instruction_array.select { |i| wires.keys.include?(i[:operand_1]) || wires.keys.include?(i[:operand_2]) }}"
+
 end
 
+def check_instruction(i, wires, instructions_hash)
+  trans = {
+    'AND'    => '&',
+    'OR'     => '|',
+    'LSHIFT' => '<<',
+    'RSHIFT' => '>>'
+  }
+  # check for all operands having a value in wires.  if so, evaluate.
+  if instructions_hash[i][:operation]
+    operand_1 = instructions_hash[i][:operand_1]
+    operand_2 = instructions_hash[i][:operand_2]
 
+    if wires.keys.include? operand_1
+      operand_1 = wires[operand_1]
+    end
 
+    if wires.keys.include? operand_2
+      operand_2 = wires[operand_2]
+    end
+    # puts "1: #{operand_1} 2: #{operand_2} #{instructions_hash[i][:operation]}"
+
+    # return if (operand_1.nil? && operand_2.nil?) || operand_1.nil?
+
+    if instructions_hash[i][:operation] == 'NOT'
+      return if operand_1.nil?
+      result = manual_not(operand_1.to_i)
+    else
+      return if operand_1.nil? || operand_2.nil?
+      puts "#{operand_1} #{trans[instructions_hash[i][:operation]]} #{operand_2}"
+      result=eval "#{operand_1} #{trans[instructions_hash[i][:operation]]} #{operand_2}"
+    end
+    wires[i] =  result
+  end
+end
+
+samples = "x -> z
+x AND y -> d
+x OR y -> e
+x LSHIFT 2 -> f
+y RSHIFT 2 -> g
+NOT x -> h
+123 -> x
+456 -> y
+NOT y -> i"
+
+build_circuit(samples)
 
 instructions = "af AND ah -> ai
 NOT lk -> ll
@@ -395,17 +446,5 @@ NOT p -> q
 k AND m -> n
 as RSHIFT 2 -> at
 "
-samples = "123 -> x
-456 -> y
-x AND y -> d
-x OR y -> e
-x LSHIFT 2 -> f
-y RSHIFT 2 -> g
-NOT x -> h
-NOT y -> i"
 
-# instructions.each_line do |line|
-#   parse_instruction(line)
-# end
-
-build_circuit(samples)
+# build_circuit(instructions)
