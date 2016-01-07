@@ -1,4 +1,4 @@
-data = File.readlines("inputs/day_9.txt")
+data = File.readlines("inputs/day_9_sample.txt")
 
 
 def parse_routes(data)
@@ -12,4 +12,10 @@ def parse_routes(data)
   collection
 end
 
-puts "#{parse_routes(data)}"
+def grab_route(key, routes)
+  routes[key].nil? ? routes[key.reverse] : routes[key]
+end
+
+routes = parse_routes(data)
+puts "#{routes.keys.flatten.uniq.permutation.to_a}"
+puts grab_route(['London', 'Dublin'], routes)
