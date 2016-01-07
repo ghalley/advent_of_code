@@ -16,6 +16,21 @@ def grab_route(key, routes)
   routes[key].nil? ? routes[key.reverse] : routes[key]
 end
 
+def calculate_distance(route, routes)
+  first_leg = route[0..1]
+  second_leg= route[1..2]
+
+  grab_route(first_leg, routes) + grab_route(second_leg, routes)
+end
+
 routes = parse_routes(data)
-puts "#{routes.keys.flatten.uniq.permutation.to_a}"
-puts grab_route(['London', 'Dublin'], routes)
+
+journeys = []
+
+routes.keys.flatten.uniq.permutation.to_a.each do |route|
+  distance = calculate_distance(route, routes)
+  journeys << {route: route, distance: distance}
+end
+
+journeys.sort_by! {|r| r[:distance]}
+puts journeys.first[:distance]
