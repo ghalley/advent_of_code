@@ -1,4 +1,5 @@
-data = File.readlines("inputs/day_9_sample.txt")
+# data = File.readlines("inputs/day_9_sample.txt")
+data = File.readlines("inputs/day_9.txt")
 
 
 def parse_routes(data)
@@ -17,10 +18,15 @@ def grab_route(key, routes)
 end
 
 def calculate_distance(route, routes)
-  first_leg = route[0..1]
-  second_leg= route[1..2]
+  distance = 0
+  (route.length - 2).times do |index|
+    first_leg = route[(index)..(index+1)]
+    second_leg = route[(index+1)..(index+2)]
+    # puts "#{first_leg} - #{second_leg}"
+    distance += grab_route(first_leg, routes) + grab_route(second_leg, routes)
+  end
 
-  grab_route(first_leg, routes) + grab_route(second_leg, routes)
+  distance
 end
 
 routes = parse_routes(data)
@@ -30,6 +36,7 @@ journeys = []
 routes.keys.flatten.uniq.permutation.to_a.each do |route|
   distance = calculate_distance(route, routes)
   journeys << {route: route, distance: distance}
+  puts "#{route} - #{distance}"
 end
 
 journeys.sort_by! {|r| r[:distance]}
