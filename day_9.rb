@@ -19,11 +19,9 @@ end
 
 def calculate_distance(route, routes)
   distance = 0
-  (route.length - 2).times do |index|
+  (route.length - 1).times do |index|
     first_leg = route[(index)..(index+1)]
-    second_leg = route[(index+1)..(index+2)]
-    # puts "#{first_leg} - #{second_leg}"
-    distance += grab_route(first_leg, routes) + grab_route(second_leg, routes)
+    distance += grab_route(first_leg, routes)
   end
 
   distance
@@ -36,7 +34,6 @@ journeys = []
 routes.keys.flatten.uniq.permutation.to_a.each do |route|
   distance = calculate_distance(route, routes)
   journeys << {route: route, distance: distance}
-  puts "#{route} - #{distance}"
 end
 
 journeys.sort_by! {|r| r[:distance]}
