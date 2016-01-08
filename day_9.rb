@@ -38,3 +38,4 @@ end
 
 journeys.sort_by! {|r| r[:distance]}
 puts journeys.first[:distance]
+puts journeys.last[:distance]
