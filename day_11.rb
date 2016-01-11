@@ -40,10 +40,13 @@ def next_password(string)
     string.next!
     passing = find_straights(string) && excludes_letters(string) && double_letters?(string)
   end
-  string
+  puts string
+  passing = false
+  while !passing
+    string.next!
+    passing = find_straights(string) && excludes_letters(string) && double_letters?(string) && string != 'hxbxxyzz'
+  end
+  puts string
 end
 
-puts next_password('abcdefgh')
-puts next_password('ghijklmn')
-
-puts next_password('hxbxwxba')
+next_password('hxbxwxba')
