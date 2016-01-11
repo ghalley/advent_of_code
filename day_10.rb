@@ -1,5 +1,5 @@
-def count_digits(string)
-  40.times do
+def count_digits(string, iterations)
+  iterations.times do
     new_array = []
     current_count = 1
 
@@ -25,4 +25,5 @@ def count_digits(string)
   puts string.length
 end
 
-count_digits('1113222113')
+count_digits('1113222113', 40)
+count_digits('1113222113', 50)
