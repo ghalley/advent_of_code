@@ -27,4 +27,25 @@ happy_hash.keys.permutation.to_a.each do |order|
   potential_arrangements[order] = total
 end
 
-puts "#{potential_arrangements.values.sort}"
+puts "#{potential_arrangements.values.sort.last}"
+
+happy_hash.keys.each do |key|
+  if happy_hash['Gaby'].nil?
+    happy_hash['Gaby'] = {key => 0}
+  else
+    happy_hash['Gaby'][key] = 0
+  end
+  happy_hash[key]['Gaby'] = 0
+end
+
+potential_arrangements = {}
+
+happy_hash.keys.permutation.to_a.each do |order|
+  total = 0
+  order.each_with_index do |name, index|
+    total = total + calculate_happines(name, order[index-1], happy_hash)
+  end
+  potential_arrangements[order] = total
+end
+
+puts "#{potential_arrangements.values.sort.last}"
