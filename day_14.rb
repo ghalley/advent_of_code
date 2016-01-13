@@ -10,7 +10,7 @@ source_data = [{name: 'Dancer', rate: 27, duration: 5, recovery: 132},
 
 class Reindeer
   attr_accessor :name, :rate, :duration, :recovery, :resting, :current_distance,
-                :rested_at, :restarted_at
+                :rested_at, :restarted_at, :score
 
   def initialize(name, rate, duration, recovery)
     @name = name
@@ -22,6 +22,7 @@ class Reindeer
     @rested_at = 0
     @restarted_at = 0
     @resting = false
+    @score = 0
   end
 
   def advance(current_time)
@@ -51,8 +52,13 @@ def race(racers, time)
     racers.each do |racer|
       racer.advance(current_time)
     end
+    leading_distance = racers.sort_by { |r| r.current_distance }.last.current_distance
+    racers.sort_by { |r| r.current_distance }.each do |r|
+      r.score +=1 if r.current_distance == leading_distance
+    end
   end
 end
 
 race(racers, 2503)
 puts "#{racers.sort_by { |r| r.current_distance }.last.current_distance}"
+puts "#{racers.sort_by { |r| r.score }.last.score}"
