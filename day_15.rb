@@ -80,3 +80,35 @@ number_combinations.each do |arrangement|
 end
 
 puts "#{combo_hash.sort_by { |a, b| b }.last}"
+
+# Part 2
+
+combo_hash = {}
+
+number_combinations.each do |arrangement|
+  arrangement.permutation.to_a.each do |combo|
+    capacity = 0
+    durability = 0
+    flavor = 0
+    texture = 0
+    calories = 0
+
+    combo.each_with_index do |amount, index|
+
+      capacity += ingredients[index].capacity * amount
+      durability += ingredients[index].durability * amount
+      flavor += ingredients[index].flavor * amount
+      texture += ingredients[index].texture * amount
+      calories += ingredients[index].calories * amount
+    end
+    next unless calories == 500
+    capacity = calculate_score(capacity)
+    durability = calculate_score(durability)
+    flavor = calculate_score(flavor)
+    texture = calculate_score(texture)
+
+    combo_hash[combo] = capacity * durability * flavor * texture
+  end
+end
+
+puts "#{combo_hash.sort_by { |a, b| b }.last}"
