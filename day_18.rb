@@ -1,10 +1,10 @@
 file = File.readlines('inputs/day_18.txt')
-sample = '.#.#.#
+sample = '##.#.#
 ...##.
 #....#
 ..#...
 #.#..#
-####..'
+####.#'
 
 def check_neighbors(light, row, column, grid)
   neighbors_on = 0
@@ -28,23 +28,37 @@ def check_neighbors(light, row, column, grid)
   end
 end
 
-def step_grid(grid)
+def step_grid(grid, corners)
   copy_grid = []
 
   grid.length.times do |row|
     new_row = []
 
     grid[row].length.times do |column|
-      new_row << check_neighbors(grid[row][column], row, column, grid)
+      if corners &&
+          ((row == 0 && column == 0) ||
+          (row == 0 && column == (grid.first.length-1)) ||
+          (row == (grid.length-1) && column == 0) ||
+          (row == (grid.length-1) && column == (grid.first.length-1)))
+        new_row << '#'
+      else
+        new_row << check_neighbors(grid[row][column], row, column, grid)
+      end
     end
     copy_grid << new_row
   end
   copy_grid
 end
 
-def change_lights(grid, iterations)
+def change_lights(grid, iterations, corners=false)
+  if corners
+    grid[0][0] = '#'
+    grid[0][-1] = '#'
+    grid[-1][0] = '#'
+    grid[-1][-1] = '#'
+  end
   iterations.times do
-    grid = step_grid(grid)
+    grid = step_grid(grid, corners)
   end
 
   grid.flatten.count {|l| l == '#'}
@@ -61,5 +75,6 @@ file.each do |line|
   lights << line.split('')[0..-2]
 end
 
-puts change_lights(sample_lights, 4)
+# puts change_lights(sample_lights, 5, true)
 puts change_lights(lights, 100)
+puts change_lights(lights, 100, true)
