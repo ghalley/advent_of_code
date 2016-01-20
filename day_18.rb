@@ -6,9 +6,6 @@ sample = '.#.#.#
 #.#..#
 ####..'
 
-puts sample
-# puts `clear`
-
 def check_neighbors(light, row, column, grid)
   neighbors_on = 0
   neighbors_on += 1 if ((row - 1) >= 0 && (column - 1) >= 0) && grid[row - 1][column - 1] == '#'
@@ -45,17 +42,24 @@ def step_grid(grid)
   copy_grid
 end
 
-lights = []
+def change_lights(grid, iterations)
+  iterations.times do
+    grid = step_grid(grid)
+  end
+
+  grid.flatten.count {|l| l == '#'}
+end
+
+sample_lights = []
 sample.split("\n").each do |line|
-  lights << line.split('')
+  sample_lights << line.split('')
 end
 
-grid = lights
-100.times do
-  grid = step_grid(grid)
+lights = []
+file.each do |line|
+  # leave out the \n at the end of each line
+  lights << line.split('')[0..-2]
 end
 
-puts
-grid.each do |row|
-  puts row.join('')
-end
+puts change_lights(sample_lights, 4)
+puts change_lights(lights, 100)
