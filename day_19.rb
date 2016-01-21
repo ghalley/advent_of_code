@@ -1,18 +1,21 @@
 input = File.read('inputs/day_19.txt').split("\n")
 
 def find_indices(target, string)
-  index = 0
   indices = []
-  while index = string.index(target,index)
-    indices << index
-    index += 1
+  found = string.index(target, 0)
+
+  while found
+    indices << found
+    found = string.index(target, found+target.length)
   end
+
   indices
 end
 
-def swap_string(orignal_string, replacement_value, index)
+def swap_string(orignal_string, replacement_value, index, length)
   new_string = orignal_string.split('')
-  new_string[index] = replacement_value
+  new_string.slice!(index, length)
+  new_string.insert(index, replacement_value)
   new_string.join('')
 end
 
@@ -30,16 +33,13 @@ possibilities = []
 
 # sample stuff
 # replacement_keys = [{'H' => 'HO'}, {'H' => 'OH'}, {'O' => 'HH'}]
-# original_molecule = 'HOH'
+# original_molecule = 'HOHOHO'
 
 replacement_keys.each do |key|
   find_indices(key.keys.first, original_molecule).each do |index|
-    string = original_molecule
-    possibilities << swap_string(original_molecule, key.values.first, index)
+    new_possibility = swap_string(original_molecule, key.values.first, index, key.keys.first.length)
+    possibilities << new_possibility unless possibilities.include?(new_possibility)
   end
 end
 
-puts possibilities.uniq.count
-
-# puts "#{swap_string('HOH', 'HO', 0)}"
-# find_indices('H', 'HOH')
+puts possibilities.length
