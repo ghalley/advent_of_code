@@ -1,4 +1,4 @@
-data = File.readlines("inputs/day_8.txt")
+data = File.readlines("inputs/day_08.txt")
 code_length = 0
 mem_length = 0
 data.each do |line|

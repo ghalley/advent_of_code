@@ -1,5 +1,5 @@
-# data = File.readlines("inputs/day_9_sample.txt")
-data = File.readlines("inputs/day_9.txt")
+# data = File.readlines("inputs/day_09_sample.txt")
+data = File.readlines("inputs/day_09.txt")
 
 
 def parse_routes(data)
