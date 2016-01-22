@@ -43,3 +43,20 @@ replacement_keys.each do |key|
 end
 
 puts possibilities.length
+
+# part 2
+# https://www.reddit.com/r/adventofcode/comments/3xflz8/day_19_solutions/cy4etju
+molecule = original_molecule
+
+molecule.gsub!('Rn', '(')
+molecule.gsub!('Ar', ')')
+molecule.gsub!('Y', ',')
+molecule.gsub!(/[a-z]/, '')
+
+rn = molecule.count('(')
+ar = molecule.count(')')
+y = molecule.count(',')
+
+symbols = molecule.length
+
+puts symbols - (rn + ar) - (2 * y) - 1
