@@ -1,11 +1,11 @@
-def find_multipliers(original_number)
-  multipliers = []
+def find_divisors(original_number)
+  divisors = []
   (1..original_number).to_a.each do |current_num|
     if original_number % current_num == 0
-      multipliers << current_num
+      divisors << current_num
     end
   end
-  multipliers
+  divisors
 end
 
-find_multipliers(9)
+find_divisors(9)
