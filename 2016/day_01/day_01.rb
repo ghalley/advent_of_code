@@ -10,10 +10,11 @@ class Day01
     @coordinates = [0,0]
     @facing = NORTH
     directions.each do |direction|
-      orientation(direction)
       move(direction)
+      orientation(direction)
     end
-    @coordinates
+
+    @coordinates.map {|xy| xy.abs}.reduce(:+)
   end
 
   def self.orientation(direction)
@@ -31,9 +32,9 @@ class Day01
 
   def self.move(direction)
     if @facing[:axis] == 'x'
-      @coordinates[0] = @coordinates.first.send(@facing[direction[0].to_sym].to_sym, direction[1].to_i)
+      @coordinates[0] = @coordinates.first.send(@facing[direction[0].to_sym].to_sym, direction[1..-1].to_i)
     else
-      @coordinates[1] = @coordinates.last.send(@facing[direction[0].to_sym].to_sym, direction[1].to_i)
+      @coordinates[1] = @coordinates.last.send(@facing[direction[0].to_sym].to_sym, direction[1..-1].to_i)
     end
   end
 end
