@@ -15,9 +15,9 @@ class Day02
   def move(instruction)
     case instruction
     when 'U'
-      @location = [@location.first, @location.last - 1] unless @location.last == 0
+      @location = [@location.first - 1, @location] unless @location.last == 0
     when 'D'
-      @location = [@location.first, @location.last + 1] unless @location.last == 0
+      @location = [@location.first, @location.last + 1] unless @location.last == @location.
     end
   end
 
