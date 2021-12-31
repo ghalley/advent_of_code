@@ -48,7 +48,7 @@ end
 
 input = File.readlines('2021/inputs/day02.txt')
 puzzle = Day02.new(input)
-puts puzzle.part1
+puts "Day 2-1: #{puzzle.part1}"
 
 puzzle = Day02.new(input)
-puts puzzle.part2
+puts "Day 2-2: #{puzzle.part2}"

@@ -38,5 +38,5 @@ end
 
 input = File.read('2021/inputs/day01pt1.txt').split("\n").map(&:to_i)
 puzzle = Day01.new(input)
-puts puzzle.part1
-puts puzzle.part2
+puts "Day 1-1: #{puzzle.part1}"
+puts "Day 1-2: #{puzzle.part2}"
