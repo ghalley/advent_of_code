@@ -10,4 +10,10 @@ RSpec.describe Day03 do
 
     it { is_expected.to eq(198) }
   end
+
+  context 'Part 2' do
+    subject { described_class.new(input).part2 }
+
+    it { is_expected.to eq(230) }
+  end
 end
