@@ -151,7 +151,7 @@ RSpec.describe Game do
       ]
     end
 
-    subject { game.play(number_of_turns) }
+    subject { game.play(number_of_turns: number_of_turns) }
 
     context 'first 5 turns' do
       let(:number_of_turns) { 5 }
@@ -168,6 +168,14 @@ RSpec.describe Game do
 
         it { is_expected.to eq(4512) }
       end
+    end
+
+    context 'Part 2' do
+      let(:number_of_turns) { nil }
+
+      subject { game.play(number_of_turns: number_of_turns, part2: true) }
+
+      it { is_expected.to eq(1924) }
     end
   end
 end

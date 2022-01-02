@@ -50,23 +50,23 @@ class Game
   end
 
   def find_winner(number)
-    @boards.select do |board|
+    boards_to_play = @boards.reject(&:bingo?)
+    boards_to_play.select do |board|
       board.match(number)
       board.bingo?
     end
   end
 
-  def play(number_of_turns = nil)
+  def play(number_of_turns: nil, part2: nil)
     total_turns = number_of_turns || turns.count
-    winning_score = 0
+    winning_scores = []
     @turns[@current_turn, total_turns].each do |turn_value|
-      winner = find_winner(turn_value)
-      next if winner.empty?
+      winners = find_winner(turn_value)
+      next if winners.empty?
 
-      winning_score = process_winner(winner.first, turn_value)
-      break
+      winning_scores << process_winner(winners.last, turn_value)
     end
-    winning_score
+    part2 ? winning_scores.last : winning_scores.first
   end
 
   def process_winner(board, winning_number)
@@ -78,3 +78,7 @@ input = File.read('2021/inputs/day04.txt')
 game = Game.new(input)
 part1 = game.play
 puts "Day 4-1: #{part1}"
+
+game = Game.new(input)
+part2 = game.play(part2: true)
+puts "Day 4-2: #{part2}"
